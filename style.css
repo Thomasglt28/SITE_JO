@@ -1,25 +1,107 @@
-body {
-  font-family: Arial, sans-serif;
-  background: #f2f2f2;
-  color: #333;
+/* ===== RÉINITIALISATION DE BASE ===== */
+/* Supprime les marges et les espacements par défaut du navigateur */
+/* et applique un système de boîte plus prévisible */
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
-header, footer {
-  background: #333;
-  color: white;
+/* ===== STYLE GLOBAL POUR LA PAGE AVEC class="accueil" ===== */
+body.accueil {
+  font-family: Arial, sans-serif;    /* Police par défaut lisible */
+  background: #f2f2f2;               /* Couleur de fond gris clair */
+  color: #333;                       /* Texte en gris foncé */
+  min-height: 100vh;                 /* Hauteur minimale = taille de l'écran */
+  display: flex;                     /* Active le modèle flexbox */
+  flex-direction: column;           /* Aligne les enfants verticalement (header, main, footer) */
+}
+
+/* ===== EN-TÊTE (header) ET PIED DE PAGE (footer) ===== */
+body.accueil header,
+body.accueil footer {
+  background: #333;                  /* Fond noir/gris très foncé */
+  color: white;                      /* Texte blanc */
+  padding: 20px;                     /* Espacement intérieur */
+  text-align: center;                /* Centrage du contenu */
+}
+
+/* ===== LIENS DU MENU DE NAVIGATION ===== */
+body.accueil nav a {
+  color: #ffcc00;                    /* Couleur jaune pour les liens */
+  margin: 0 10px;                    /* Espacement horizontal entre les liens */
+  text-decoration: none;            /* Supprime le soulignement par défaut */
+}
+
+/* ===== CONTENU PRINCIPAL (main) ===== */
+body.accueil main {
+  flex: 1;                           /* Prend toute la hauteur restante entre header et footer */
+  display: flex;                     /* Active flexbox pour centrer le contenu */
+  flex-direction: column;           /* Contenu centré verticalement */
+  justify-content: center;          /* Centre verticalement */
+  align-items: center;              /* Centre horizontalement */
+  padding: 40px;                    /* Espacement autour du contenu */
+}
+
+
+
+
+
+
+/* ===== STYLE POUR LA PAGE class="image" ===== */
+/* Ce style ne s'applique que si <body class="image"> est présent */
+
+/* === Style global === */
+body.image {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Police un peu plus moderne */
+  background: url('background.jpg') no-repeat center center fixed; /* Image de fond plein écran */
+  background-size: cover;            /* L'image prend toute la taille de l'écran */
+  color: white;                      /* Texte en blanc pour contraster */
+  min-height: 100vh;                 /* Hauteur minimale = écran complet */
+  display: flex;
+  flex-direction: column;
+}
+
+/* === En-tête et pied de page === */
+body.image header,
+body.image footer {
+  background: rgba(0, 0, 0, 0.6);    /* Fond noir transparent */
   padding: 20px;
   text-align: center;
 }
 
-nav a {
-  color: #ffcc00;
+/* === Liens dans le menu de navigation === */
+body.image nav a {
+  color: #00ffff;                   /* Cyan pour les liens */
   margin: 0 10px;
   text-decoration: none;
+  font-weight: bold;
 }
 
-main {
-  padding: 20px;
+body.image nav a:hover {
+  text-decoration: underline;
+}
+
+/* === Contenu principal === */
+body.image main {
+  flex: 1;                          /* Prend toute la place disponible */
+  display: flex;
+  justify-content: center;         /* Centre horizontalement */
+  align-items: center;             /* Centre verticalement */
+  padding: 40px;
+  background-color: rgba(0, 0, 0, 0.4); /* Fond semi-transparent pour lisibilité */
+  border-radius: 15px;
+  margin: 40px;
+}
+
+/* === Titres et paragraphes === */
+body.image h2 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+}
+
+body.image p {
+  font-size: 1.2em;
+  max-width: 600px;
   text-align: center;
 }
