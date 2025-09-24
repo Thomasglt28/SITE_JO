@@ -3,10 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <title>Contact</title>
+  <meta name="referrer" content="origin">
   <link rel="stylesheet" href="style.css" />
+
+  <!-- EmailJS (client-side) -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
 
 <body class="contact">
+  <!-- Calque décoratif global -->
   <div class="bg-neon" aria-hidden="true"></div>
 
   <header>
@@ -19,7 +24,7 @@
       <div class="formulaire-contact">
         <h2>Contactez-moi</h2>
 
-        <!-- Cible silencieuse -->
+        <!-- Cible silencieuse pour FormSubmit -->
         <iframe name="fs_iframe" id="fs_iframe" style="display:none"></iframe>
 
         <form id="formulaire"
@@ -32,9 +37,10 @@
           <input type="hidden" name="_subject" value="Nouveau message de contact !" />
           <input type="hidden" name="_captcha" value="false" />
           <input type="hidden" name="_template" value="table" />
-          <input type="hidden" name="_autoresponse" value="Votre message a bien été reçu.">
-          <input type="hidden" name="_autoresponse_subject" value="Accusé de réception - Jo">
-          <!-- important pour l'autoresponse -->
+          <!-- (on peut laisser l'autoresponse FormSubmit au cas où) -->
+          <input type="hidden" name="_autoresponse" value="Votre message a bien été reçu." />
+          <input type="hidden" name="_autoresponse_subject" value="Accusé de réception - Jo" />
+          <!-- Pour que FormSubmit connaisse l'email expéditeur -->
           <input type="hidden" name="_replyto" id="_replyto" />
 
           <div class="champ">
@@ -67,18 +73,20 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      const form   = document.getElementById("formulaire");
-      const iframe = document.getElementById("fs_iframe");
+      // === Identifiants EmailJS ===
+      const EMAILJS_PUBLIC_KEY  = "Vi7031EvfHVnoZakw";
+      const EMAILJS_SERVICE_ID  = "service_t1p1q8c";
+      const EMAILJS_TEMPLATE_ID = "template_wi06tbl";
 
-      // petit indicateur quand FormSubmit répond
-      if (iframe) {
-        iframe.addEventListener("load", function () {
-          console.log("FormSubmit a répondu (iframe load).");
-        });
+      // Init EmailJS si dispo
+      if (window.emailjs && EMAILJS_PUBLIC_KEY) {
+        emailjs.init(EMAILJS_PUBLIC_KEY);
       }
 
+      const form = document.getElementById("formulaire");
+
       form.addEventListener("submit", function (e) {
-        e.preventDefault(); // on garde la page
+        e.preventDefault(); // on reste sur la page
         let isValid = true;
 
         // Nettoyage
@@ -108,14 +116,28 @@
 
         if (!isValid) return;
 
-        // Renseigner _replyto avec l'adresse saisie
-        document.getElementById("_replyto").value =
-          document.getElementById("email").value.trim();
+        // Remplir _replyto pour FormSubmit
+        document.getElementById("_replyto").value = document.getElementById("email").value.trim();
 
-        // Envoi vers FormSubmit (dans l'iframe cachée)
+        // === Envoi FormSubmit (iframe) ===
         form.submit();
 
-        // Succès visuel + reset (tes timings)
+        // === Accusé de réception via EmailJS (variables: email, nom, sujet, message) ===
+        if (window.emailjs && EMAILJS_PUBLIC_KEY && EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID) {
+          const params = {
+            email:   document.getElementById("email").value.trim(),   // {{email}}
+            nom:     document.getElementById("nom").value.trim() || " ", // {{nom}}
+            sujet:   document.getElementById("sujet").value.trim(),      // {{sujet}}
+            message: document.getElementById("message").value.trim()     // {{message}} si utilisé
+          };
+
+          emailjs
+            .send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params)
+            .then(() => console.log("Auto-réponse envoyée via EmailJS"),
+                  (err) => console.warn("EmailJS error:", err));
+        }
+
+        // Message succès + reset
         const success = document.createElement("div");
         success.className = "success-message";
         success.textContent = "Message envoyé avec succès !";
