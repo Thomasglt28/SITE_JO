@@ -632,15 +632,15 @@ body.contact header { height: 120px; }
 body.contact footer { height: 60px; }
 
 body.contact header {
-  margin-top: 0;        /* empêche qu’il descende */
-  border-radius: 0;     /* pas d’arrondi en haut */
-  border-top: none;     /* enlève une éventuelle bordure */
+  margin-top: 0;
+  border-radius: 0;
+  border-top: none;
 }
 
 body.contact footer {
-  margin-bottom: 0;        /* empêche qu’il remonte */
-  border-radius: 0;     /* pas d’arrondi en bas */
-  border-bottom: none;     /* enlève une éventuelle bordure */
+  margin-bottom: 0;
+  border-radius: 0;
+  border-bottom: none;
 }
 
 body.contact header h1 {

@@ -7,24 +7,35 @@
 </head>
 
 <body class="contact">
-  <!-- Calque décoratif global -->
   <div class="bg-neon" aria-hidden="true"></div>
 
   <header>
     <h1>Contactez JO</h1>
-    <nav>
-      <a href="index.html">Retour Accueil</a>
-    </nav>
+    <nav><a href="index.html">Retour Accueil</a></nav>
   </header>
 
   <main>
     <div class="panel-contact">
       <div class="formulaire-contact">
         <h2>Contactez-moi</h2>
-        <form id="formulaire" action="https://formsubmit.co/el/vorifa" method="POST" novalidate>
+
+        <!-- Cible silencieuse -->
+        <iframe name="fs_iframe" id="fs_iframe" style="display:none"></iframe>
+
+        <form id="formulaire"
+              action="https://formsubmit.co/b7d24ec775ed82703e9db3b554db2238"
+              method="POST"
+              novalidate
+              target="fs_iframe">
+
+          <!-- Options FormSubmit -->
           <input type="hidden" name="_subject" value="Nouveau message de contact !" />
           <input type="hidden" name="_captcha" value="false" />
           <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="_autoresponse" value="Votre message a bien été reçu.">
+          <input type="hidden" name="_autoresponse_subject" value="Accusé de réception - Jo">
+          <!-- important pour l'autoresponse -->
+          <input type="hidden" name="_replyto" id="_replyto" />
 
           <div class="champ">
             <label for="nom">Nom et Prénom :</label>
@@ -33,7 +44,7 @@
 
           <div class="champ">
             <label for="email">Email :</label>
-            <input type="email" id="email" name="email" />
+            <input type="email" id="email" name="email" autocomplete="email" />
           </div>
 
           <div class="champ">
@@ -52,25 +63,30 @@
     </div>
   </main>
 
-  <footer>
-    <p>&copy; 2025 - Jo photographe</p>
-  </footer>
+  <footer><p>&copy; 2025 - Jo photographe</p></footer>
 
-  <!-- Script de validation -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      const form = document.getElementById("formulaire");
+      const form   = document.getElementById("formulaire");
+      const iframe = document.getElementById("fs_iframe");
+
+      // petit indicateur quand FormSubmit répond
+      if (iframe) {
+        iframe.addEventListener("load", function () {
+          console.log("FormSubmit a répondu (iframe load).");
+        });
+      }
 
       form.addEventListener("submit", function (e) {
-        e.preventDefault();
+        e.preventDefault(); // on garde la page
         let isValid = true;
 
+        // Nettoyage
         form.querySelectorAll(".error-message").forEach((msg) => msg.remove());
-        form.querySelectorAll("input, textarea").forEach((field) => {
-          field.classList.remove("invalid");
-        });
+        form.querySelectorAll("input, textarea").forEach((field) => field.classList.remove("invalid"));
 
-        form.querySelectorAll("input, textarea").forEach((field) => {
+        // Validation : uniquement les champs visibles
+        form.querySelectorAll('input:not([type="hidden"]), textarea').forEach((field) => {
           const value = field.value.trim();
           let error = "";
 
@@ -83,7 +99,6 @@
           if (error) {
             isValid = false;
             field.classList.add("invalid");
-
             const errorMsg = document.createElement("div");
             errorMsg.className = "error-message";
             errorMsg.textContent = error;
@@ -91,17 +106,24 @@
           }
         });
 
-        if (isValid) {
-          const success = document.createElement("div");
-          success.className = "success-message";
-          success.textContent = "Message envoyé avec succès !";
-          form.appendChild(success);
+        if (!isValid) return;
 
-          setTimeout(() => success.classList.add("fade-out"), 9000);
-          setTimeout(() => success.remove(), 10000);
+        // Renseigner _replyto avec l'adresse saisie
+        document.getElementById("_replyto").value =
+          document.getElementById("email").value.trim();
 
-          form.reset();
-        }
+        // Envoi vers FormSubmit (dans l'iframe cachée)
+        form.submit();
+
+        // Succès visuel + reset (tes timings)
+        const success = document.createElement("div");
+        success.className = "success-message";
+        success.textContent = "Message envoyé avec succès !";
+        form.appendChild(success);
+
+        setTimeout(() => form.reset(), 0);
+        setTimeout(() => success.classList.add("fade-out"), 9000);
+        setTimeout(() => success.remove(), 10000);
       });
     });
   </script>
