@@ -1,107 +1,1058 @@
-/* ===== RÉINITIALISATION DE BASE ===== */
-/* Supprime les marges et les espacements par défaut du navigateur */
-/* et applique un système de boîte plus prévisible */
+/* =========================================================
+   RÉINITIALISATION DE BASE
+   ========================================================= */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* ===== STYLE GLOBAL POUR LA PAGE AVEC class="accueil" ===== */
+/* =========================================================
+   ACCUEIL — structure compacte "comme À propos"
+   ========================================================= */
 body.accueil {
-  font-family: Arial, sans-serif;    /* Police par défaut lisible */
-  background: #f2f2f2;               /* Couleur de fond gris clair */
-  color: #333;                       /* Texte en gris foncé */
-  min-height: 100vh;                 /* Hauteur minimale = taille de l'écran */
-  display: flex;                     /* Active le modèle flexbox */
-  flex-direction: column;           /* Aligne les enfants verticalement (header, main, footer) */
-}
-
-/* ===== EN-TÊTE (header) ET PIED DE PAGE (footer) ===== */
-body.accueil header,
-body.accueil footer {
-  background: #333;                  /* Fond noir/gris très foncé */
-  color: white;                      /* Texte blanc */
-  padding: 20px;                     /* Espacement intérieur */
-  text-align: center;                /* Centrage du contenu */
-}
-
-/* ===== LIENS DU MENU DE NAVIGATION ===== */
-body.accueil nav a {
-  color: #ffcc00;                    /* Couleur jaune pour les liens */
-  margin: 0 10px;                    /* Espacement horizontal entre les liens */
-  text-decoration: none;            /* Supprime le soulignement par défaut */
-}
-
-/* ===== CONTENU PRINCIPAL (main) ===== */
-body.accueil main {
-  flex: 1;                           /* Prend toute la hauteur restante entre header et footer */
-  display: flex;                     /* Active flexbox pour centrer le contenu */
-  flex-direction: column;           /* Contenu centré verticalement */
-  justify-content: center;          /* Centre verticalement */
-  align-items: center;              /* Centre horizontalement */
-  padding: 40px;                    /* Espacement autour du contenu */
-}
-
-
-
-
-
-
-/* ===== STYLE POUR LA PAGE class="image" ===== */
-/* Ce style ne s'applique que si <body class="image"> est présent */
-
-/* === Style global === */
-body.image {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Police un peu plus moderne */
-  background: url('background.jpg') no-repeat center center fixed; /* Image de fond plein écran */
-  background-size: cover;            /* L'image prend toute la taille de l'écran */
-  color: white;                      /* Texte en blanc pour contraster */
-  min-height: 100vh;                 /* Hauteur minimale = écran complet */
+  font-family: Arial, sans-serif;
+  color: #333;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
+
+  /* Calque décoratif fixé en arrière-plan */
+  position: relative;
+  overflow-x: hidden;
+
+  /* Fallback si le SVG ne charge pas */
+  background: #ffffff;
 }
 
-/* === En-tête et pied de page === */
-body.image header,
-body.image footer {
-  background: rgba(0, 0, 0, 0.6);    /* Fond noir transparent */
+/* Calque décoratif : stries + halos */
+body.accueil .bg-neon {
+  position: fixed;
+  inset: 0;
+  z-index: 0;                 /* sous le contenu */
+  pointer-events: none;       /* ne bloque pas les clics */
+  background:
+    radial-gradient(1200px 700px at 0% -10%, rgba(255,255,255,.08), transparent 60%),
+    radial-gradient(1000px 600px at 100% 0%, rgba(255,255,255,.06), transparent 55%),
+    repeating-linear-gradient(-10deg, #191919 0 18px, #0f0f0f 18px 40px);
+}
+
+/* Surcouche SVG : lignes néon (placer images/neon-squiggles.svg) */
+body.accueil .bg-neon::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("image/neon-squiggles.svg") center / cover no-repeat;
+  mix-blend-mode: screen;     /* boost le glow sur fond sombre */
+  opacity: 0.95;
+  animation: drift 24s ease-in-out infinite alternate;
+}
+
+/* Effet de dérive très léger du calque SVG */
+@keyframes drift {
+  0%   { transform: translate3d(0, 0, 0) scale(1.02); }
+  100% { transform: translate3d(-20px, -10px, 0) scale(1.04); }
+}
+
+/* Le contenu passe au-dessus du décor en une ligne */
+body.accueil header,
+body.accueil main,
+body.accueil footer {
+  position: relative;
+  z-index: 1;
+}
+
+/* =========================================================
+   HEADER / FOOTER — même présentation que "À propos"
+   (on garde tes hauteurs et ta logique, mais en verre dépoli)
+   ========================================================= */
+body.accueil header,
+body.accueil footer {
+  background: rgba(20,20,20,.55);
+  color: #fff;
   padding: 20px;
   text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  border-top: 1px solid rgba(255,255,255,.7);
+  border-bottom: 1px solid rgba(255,255,255,.7);
+  backdrop-filter: blur(8px) saturate(120%);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
+  box-shadow: 0 8px 24px rgba(0,0,0,.45);
 }
 
-/* === Liens dans le menu de navigation === */
-body.image nav a {
-  color: #00ffff;                   /* Cyan pour les liens */
-  margin: 0 10px;
+/* Tes valeurs déjà entrées */
+body.accueil header { height: 120px; }
+body.accueil footer { height: 60px; }
+
+body.accueil header {
+  margin-top: 0;        /* empêche qu’il descende */
+  border-radius: 0;     /* pas d’arrondi en haut */
+  border-top: none;     /* enlève une éventuelle bordure */
+}
+
+body.accueil footer {
+  margin-bottom: 0;        /* empêche qu’il remonte */
+  border-radius: 0;     /* pas d’arrondi en bas */
+  border-bottom: none;     /* enlève une éventuelle bordure */
+}
+
+body.accueil header h1 { margin-bottom: 20px; }
+
+/* Navigation (identique, avec meilleur contraste) */
+body.accueil nav a {
+  color: #ffcc00;
+  margin: 0 20px;
+  padding: 5px 0;
   text-decoration: none;
   font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0,0,0,.6);
+}
+body.accueil nav a:hover { text-decoration: underline; }
+
+/* =========================================================
+   MAIN — mêmes espacements que chez toi
+   ========================================================= */
+body.accueil main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 50px;              /* espace entre blocs */
+  padding: 60px 20px;
+}
+
+body.accueil .text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 60px;
+  background-color: rgba(25,25,25,0.85); /* verre dépoli léger au centre */
+  border: 1px solid rgba(255,255,255,.7);
+  border-radius: 15px;
+  max-width: 900px;      /* largeur max (augmente pour allonger) */
+  width: 90%;
+  margin: auto auto;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* Intro : meilleur contraste sur fond sombre */
+.intro-text { text-align: center; }
+.intro-text h2 { font-size: 1.8em; margin-bottom: 10px; color: #ffffff; }
+.intro-text p  { font-size: 1em; color: #ffffff; }
+
+/* =========================================================
+   TES 3 BLOCS — laissés distincts (valeurs d’origine)
+   ========================================================= */
+
+/* ===== BLOC DRONE ===== */
+.drone-cadre {
+  width: 1100px;
+  height: 400px;
+  margin: auto;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  position: relative; /* pour positionner l'image à l'intérieur */
+}
+
+.drone-viewer {
+  position: absolute;
+  top: 50%;             /* ajuste comme tu veux */
+  left: 18.20%;         /* ajuste comme tu veux */
+  transform: translate(-50%, -50%) scale(1); /* centré et zoom normal */
+  max-width: 400px;     /* largeur max du cadre */
+  width: 100%;
+  height: auto;         /* hauteur fixe */
+  border-radius: 12px;
+}
+
+.Titre-drone {
+  position: absolute;
+  top: 45%;
+  left: 40%;
+  transform: translateX(65%) translateY(-450%);
+  background-color: rgba(0, 0, 0, 0.6); /* fond semi-transparent */
+  color: rgb(255, 255, 255);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 1em;
+}
+
+.legende-drone {
+  position: absolute;
+  top: 45%;
+  left: 40%;
+  transform: translateX(-4%) translateY(-35%);
+  background-color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
+  font-style: italic;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 1em;
+}
+
+/* ===== BLOC VIDÉO ===== */
+.video-cadre {
+  width: 1100px;
+  height: auto;
+  margin: auto;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  position: relative; /* pour positionner l'image à l'intérieur */
+}
+
+.video-cadre .video {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: #000;
+}
+
+/* ===== BLOC APPAREIL PHOTO ===== */
+.cadre-photo {
+  width: 1100px;
+  height: 400px;
+  margin: auto;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  position: relative; /* pour positionner l'image à l'intérieur */
+}
+
+.image-interne {
+  position: absolute;
+  top: 50%;
+  left: 18.20%;
+  transform: translate(-50%, -50%) scale(1); /* centré et zoom normal */
+  width: auto;
+  height: 95%;
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+.Titre-photo {
+  position: absolute;
+  top: 45%;
+  left: 40%;
+  transform: translateX(35%) translateY(-450%);
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 1em;
+}
+
+.legende-photo {
+  position: absolute;
+  top: 45%;
+  left: 40%;
+  transform: translateX(-4%) translateY(-35%);
+  background-color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
+  font-style: italic;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 1em;
+}
+
+/* =========================================================
+   ACCESSIBILITÉ — animations réduites
+   ========================================================= */
+@media (prefers-reduced-motion: reduce) {
+  body.accueil .bg-neon::after { animation: none; }
+}
+
+/* =========================================================
+   RÉINITIALISATION DE BASE
+   ========================================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   IMAGE — structure compacte comme "À propos"
+   ========================================================= */
+body.image {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  /* Calque décoratif fixé en arrière-plan */
+  position: relative;
+  overflow-x: hidden;
+
+  /* Fallback (au cas où le SVG ne charge pas) */
+  background: #111;
+}
+
+/* Calque décoratif : stries + halos */
+body.image .bg-neon {
+  position: fixed;
+  inset: 0;
+  z-index: 0;                 /* sous le contenu */
+  pointer-events: none;       /* ne bloque pas les clics */
+  background:
+    radial-gradient(1200px 700px at 0% -10%, rgba(255,255,255,.08), transparent 60%),
+    radial-gradient(1000px 600px at 100% 0%, rgba(255,255,255,.06), transparent 55%),
+    repeating-linear-gradient(-10deg, #191919 0 18px, #0f0f0f 18px 40px);
+}
+
+/* Surcouche SVG : lignes néon (placer images/neon-squiggles.svg) */
+body.image .bg-neon::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("image/neon-squiggles.svg") center / cover no-repeat;
+  mix-blend-mode: screen;     /* boost le glow sur fond sombre */
+  opacity: 0.95;
+  animation: drift 24s ease-in-out infinite alternate;
+}
+
+/* Effet de dérive très léger du calque SVG */
+@keyframes drift {
+  0%   { transform: translate3d(0, 0, 0) scale(1.02); }
+  100% { transform: translate3d(-20px, -10px, 0) scale(1.04); }
+}
+
+/* Le contenu passe au-dessus du décor en une ligne */
+body.image header,
+body.image main,
+body.image footer,
+body.image .description_photos {
+  position: relative;
+  z-index: 1;
+}
+
+/* =========================================================
+   HEADER / FOOTER — même présentation que "À propos"
+   ========================================================= */
+body.image header,
+body.image footer {
+  background: rgba(20,20,20,.55);
+  color: white;
+  padding: 20px;
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  border-top: 1px solid rgba(255,255,255,.7);
+  border-bottom: 1px solid rgba(255,255,255,.7);
+  backdrop-filter: blur(8px) saturate(120%);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
+  box-shadow: 0 8px 24px rgba(0,0,0,.45);
+  width: 100%;
+}
+
+body.image header { height: 120px; }
+body.image footer { height: 60px; }
+
+body.image header {
+  margin-top: 0;        /* empêche qu’il descende */
+  border-radius: 0;     /* pas d’arrondi en haut */
+  border-top: none;     /* enlève une éventuelle bordure */
+}
+
+body.image footer {
+  margin-bottom: 0;        /* empêche qu’il remonte */
+  border-radius: 0;     /* pas d’arrondi en bas */
+  border-bottom: none;     /* enlève une éventuelle bordure */
+}
+
+body.image header h1 {
+  margin-top: -8px;
+  margin-bottom: 17px;
+}
+
+body.image nav a {
+  color: #ffcc00;
+  margin: 0 20px;
+  padding: 5px 0;
+  text-decoration: none;
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0,0,0,.6);
 }
 
 body.image nav a:hover {
   text-decoration: underline;
 }
 
-/* === Contenu principal === */
-body.image main {
-  flex: 1;                          /* Prend toute la place disponible */
-  display: flex;
-  justify-content: center;         /* Centre horizontalement */
-  align-items: center;             /* Centre verticalement */
-  padding: 40px;
-  background-color: rgba(0, 0, 0, 0.4); /* Fond semi-transparent pour lisibilité */
-  border-radius: 15px;
-  margin: 40px;
-}
-
-/* === Titres et paragraphes === */
-body.image h2 {
-  font-size: 2.5em;
-  margin-bottom: 20px;
-}
-
-body.image p {
-  font-size: 1.2em;
-  max-width: 600px;
+body.image footer p {
+  margin: 0 auto;
   text-align: center;
+}
+
+/* =========================================================
+   CONTENU PRINCIPAL
+   ========================================================= */
+body.image main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 45px;
+  background-color: rgba(25,25,25,.7); /* verre dépoli léger au centre */
+  border: 1px solid rgba(255,255,255,.7);
+  border-radius: 15px;
+  width: 80%;
+  margin: 30px auto;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* Texte sous le header (au-dessus du main) */
+body.image .description_photos {
+  color: #f0f0f0;
+  font-size: 1.3em;
+  text-align: center;
+  margin: 20px 0 -10px 0;
+  text-shadow: 0 1px 2px rgba(0,0,0,.6);
+}
+
+/* =========================================================
+   GALERIE (inchangée : tes valeurs d’origine)
+   ========================================================= */
+
+/* Zone grise autour (facultatif) */
+.zone-photos {
+  min-height: 100vh;
+  background-color: rgba(25,25,25,.7); /* verre dépoli léger au centre */
+  border: 1px solid rgba(255,255,255,.7);
+  border-radius: 14px;
+  padding: 32px;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+}
+
+/* Cadre blanc (ta galerie) */
+.cadre_galerie {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+
+  height: calc(100vh - 64px);
+  min-height: 60vh;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+
+  /* Scrollbar (Firefox) */
+  scrollbar-width: auto;
+  scrollbar-color: #999 transparent;
+}
+/* Scrollbar (WebKit/Chromium) */
+.cadre_galerie::-webkit-scrollbar { width: 12px; }
+.cadre_galerie::-webkit-scrollbar-track {
+  background: transparent;
+  border-left: 6px solid #fff;
+  border-radius: 10px;
+}
+.cadre_galerie::-webkit-scrollbar-thumb {
+  background-color: #999;
+  border-radius: 10px;
+  border: 4px solid #fff;
+}
+
+/* Grille d'images responsive */
+.grille_image {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 1fr; /* base : 1 colonne */
+  align-items: start;
+}
+@media (min-width: 700px)  { .grille_image { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .grille_image { grid-template-columns: repeat(3, 1fr); } }
+
+/* Vignettes */
+.grille_image img {
+  width: 100%;
+  height: 220px;     /* hauteur uniforme des vignettes */
+  object-fit: cover; /* remplit la cellule sans déformer */
+  border-radius: 8px;
+  display: block;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.grille_image img:hover {
+  transform: scale(1.01);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+/* =========================================================
+   LIGHTBOX
+   ========================================================= */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.lightbox img {
+  max-width: 90%;
+  max-height: 80%;
+  border-radius: 10px;
+  box-shadow: 0 0 20px black;
+  transition: transform .15s ease;
+}
+
+.close-btn {
+  position: absolute;
+  top: 30px;
+  right: 40px;
+  font-size: 2em;
+  color: white;
+  cursor: pointer;
+}
+
+.nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: white;
+  font-size: 3em;
+  cursor: pointer;
+  padding: 0 15px;
+}
+.nav-btn.prev { left: 10px; }
+.nav-btn.next { right: 10px; }
+
+/* =========================================================
+   ACCESSIBILITÉ — animations réduites
+   ========================================================= */
+@media (prefers-reduced-motion: reduce) {
+  body.image .bg-neon::after { animation: none; }
+}
+
+
+/* =========================================================
+   RÉINITIALISATION
+   ========================================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   CONTACT — structure compacte
+   ========================================================= */
+body.contact {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow-x: hidden;
+  background: #111; /* fallback si SVG absent */
+}
+
+/* Fond décoratif : stries + néons */
+body.contact .bg-neon {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(1200px 700px at 0% -10%, rgba(255,255,255,.08), transparent 60%),
+    radial-gradient(1000px 600px at 100% 0%, rgba(255,255,255,.06), transparent 55%),
+    repeating-linear-gradient(-10deg, #191919 0 18px, #0f0f0f 18px 40px);
+}
+body.contact .bg-neon::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("image/neon-squiggles.svg") center/cover no-repeat;
+  mix-blend-mode: screen;
+  opacity: 0.95;
+  animation: drift 24s ease-in-out infinite alternate;
+}
+@keyframes drift {
+  0%   { transform: translate3d(0,0,0) scale(1.02); }
+  100% { transform: translate3d(-20px,-10px,0) scale(1.04); }
+}
+
+/* Tout le contenu au-dessus du fond */
+body.contact header,
+body.contact main,
+body.contact footer {
+  position: relative;
+  z-index: 1;
+}
+
+/* =========================================================
+   HEADER / FOOTER (verre dépoli, mêmes hauteurs que tes valeurs)
+   ========================================================= */
+body.contact header,
+body.contact footer {
+  background: rgba(20,20,20,.55);
+  color: white;
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  border-bottom: 1px solid rgba(255,255,255,.7);
+  border-top: 1px solid rgba(255,255,255,.7);
+  backdrop-filter: blur(8px) saturate(120%);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
+  box-shadow: 0 8px 24px rgba(0,0,0,.45);
+  width: 100%;
+}
+body.contact header { height: 120px; }
+body.contact footer { height: 60px; }
+
+body.contact header {
+  margin-top: 0;        /* empêche qu’il descende */
+  border-radius: 0;     /* pas d’arrondi en haut */
+  border-top: none;     /* enlève une éventuelle bordure */
+}
+
+body.contact footer {
+  margin-bottom: 0;        /* empêche qu’il remonte */
+  border-radius: 0;     /* pas d’arrondi en bas */
+  border-bottom: none;     /* enlève une éventuelle bordure */
+}
+
+body.contact header h1 {
+  margin-top: -8px;
+  margin-bottom: 17px;
+}
+body.contact nav a {
+  color: #ffcc00;
+  margin: 0 20px;
+  padding: 5px 0;
+  text-decoration: none;
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0,0,0,.6);
+}
+body.contact nav a:hover { text-decoration: underline; }
+body.contact footer p {
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* =========================================================
+   MAIN : cadre contenant le formulaire
+   ========================================================= */
+body.contact main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  padding: 45px;
+  background-color: rgba(25,25,25,.6);
+  border-radius: 15px;
+  width: 80%;
+  max-width: 1000px;
+  margin: 30px auto;
+
+  border: 1px solid rgba(255,255,255,.7);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* =========================================================
+   FORMULAIRE (tes réglages d’origine conservés)
+   ========================================================= */
+.panel-contact {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+}
+.formulaire-contact {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
+  color: #333;
+  box-sizing: border-box;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.formulaire-contact h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 1.8em;
+  color: #222;
+}
+.formulaire-contact form {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.formulaire-contact form > .champ:nth-of-type(1),
+.formulaire-contact form > .champ:nth-of-type(2),
+.formulaire-contact form > .champ:nth-of-type(3) {
+  flex: 1 1 56px;
+}
+.formulaire-contact form > .champ:nth-of-type(4) {
+  flex: 3 1 180px;
+}
+.formulaire-contact form > .champ {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.formulaire-contact label {
+  font-weight: bold;
+  color: #000;
+  margin-bottom: 0;
+  text-align: left;
+}
+.formulaire-contact input {
+  flex: 1 1 auto;
+  min-height: 56px;
+  padding: 12px 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1em;
+  font-family: inherit;
+  transition: border 0.3s ease;
+  box-sizing: border-box;
+}
+.formulaire-contact textarea {
+  flex: 1 1 auto;
+  min-height: 180px;
+  padding: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1em;
+  font-family: inherit;
+  transition: border 0.3s ease;
+  box-sizing: border-box;
+}
+.formulaire-contact button {
+  margin-top: 5px;
+  padding: 12px;
+  background-color: #ffcc00;
+  border: none;
+  border-radius: 8px;
+  font-size: 1em;
+  font-weight: bold;
+  color: #222;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+.formulaire-contact button:hover {
+  background-color: #e6b800;
+}
+
+/* =========================================================
+   ÉTATS / MESSAGES
+   ========================================================= */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-4px); }
+  40% { transform: translateX(4px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+  100% { transform: translateX(0); }
+}
+.invalid {
+  border: 2px solid red !important;
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.6);
+  animation: shake 0.3s ease;
+}
+.error-message {
+  color: red;
+  font-size: 0.9em;
+  margin-top: 5px;
+  font-style: italic;
+}
+.success-message {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+  padding: 15px;
+  margin-top: 20px;
+  text-align: center;
+  border-radius: 8px;
+  font-weight: bold;
+  opacity: 1;
+  transition: opacity 1s ease;
+}
+.success-message.fade-out { opacity: 0; }
+
+/* =========================================================
+   ACCESSIBILITÉ
+   ========================================================= */
+@media (prefers-reduced-motion: reduce) {
+  body.contact .bg-neon::after { animation: none; }
+}
+
+
+/* ===== À PROPOS – base ===== */
+body.a_propos {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  /* fond sombre + gestion du calque décoratif */
+  position: relative;
+  background: #ffffff;           /* base au cas où le SVG ne charge pas */
+  overflow-x: hidden;
+}
+
+/* ---------- Calque décoratif (stries + néons) ---------- */
+body.a_propos .bg-neon {
+  position: fixed;
+  inset: 0;
+  z-index: 0;                 /* AU-DESSUS du body, mais sous le contenu */
+  pointer-events: none;       /* laisse passer les clics */
+  background:
+    radial-gradient(1200px 700px at 0% -10%, rgba(255,255,255,.08), transparent 60%),
+    radial-gradient(1000px 600px at 100% 0%, rgba(255,255,255,.06), transparent 55%),
+    repeating-linear-gradient(-10deg, #191919 0 18px, #0f0f0f 18px 40px); /* stries type plafond */
+}
+
+/* Surcouche avec les lignes néon (image SVG) */
+body.a_propos .bg-neon::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("image/neon-squiggles.svg") center / cover no-repeat; /* adapte le chemin si besoin */
+  mix-blend-mode: screen;  /* boost le glow sur fond sombre */
+  opacity: 0.95;
+  animation: drift 24s ease-in-out infinite alternate;
+}
+@keyframes drift {
+  0%   { transform: translate3d(0px, 0px, 0) scale(1.02); }
+  100% { transform: translate3d(-20px, -10px, 0) scale(1.04); }
+}
+
+/* Le contenu passe au-dessus du calque décoratif */
+body.a_propos header,
+body.a_propos main,
+body.a_propos footer {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- Header / Footer ---------- */
+body.a_propos header,
+body.a_propos footer {
+  background: rgba(20,20,20,.55);
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  border-top: 1px solid rgba(255,255,255,.7);
+  border-bottom: 1px solid rgba(255,255,255,.7);
+  backdrop-filter: blur(8px) saturate(120%);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
+  box-shadow: 0 8px 24px rgba(0,0,0,.45);
+}
+
+/* Tes valeurs déjà entrées */
+body.a_propos header { height: 120px; }
+body.a_propos footer { height: 60px; }
+
+body.a_propos header {
+  margin-top: 0;        /* empêche qu’il descende */
+  border-radius: 0;     /* pas d’arrondi en haut */
+  border-top: none;     /* enlève une éventuelle bordure */
+}
+
+body.a_propos footer {
+  margin-bottom: 0;        /* empêche qu’il remonte */
+  border-radius: 0;     /* pas d’arrondi en bas */
+  border-bottom: none;     /* enlève une éventuelle bordure */
+}
+
+body.a_propos header h1 {
+  margin-top: -8px;
+  margin-bottom: 17px;
+}
+
+/* Navigation (identique, avec meilleur contraste) */
+body.a_propos nav a {
+  color: #ffcc00;
+  margin: 0 20px;
+  padding: 5px 0;
+  text-decoration: none;
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0,0,0,.6);
+}
+body.a_propos nav a:hover { text-decoration: underline; }
+
+/* ---------- Contenu principal ---------- */
+body.a_propos main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 45px;
+  background: rgba(25,25,25,.7);
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 15px;
+  width: 80%;
+  margin: 30px auto;
+  max-width: 1100px;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* ---------- Timeline ---------- */
+body.a_propos .timeline {
+  position: relative;
+  margin: 10px auto 0;
+  padding: 10px 0 30px;
+  width: 100%;
+}
+
+body.a_propos .timeline::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0; bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg,
+    rgba(255,255,255,.25),
+    rgba(255,255,255,.12),
+    rgba(255,255,255,.25));
+  transform: translateX(-50%);
+  border-radius: 2px;
+}
+
+body.a_propos .item {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2rem;
+  margin: 32px 0;
+}
+
+body.a_propos .item .marker {
+  position: absolute;
+  left: 50%; top: 14px;
+  transform: translate(-50%, -50%);
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: #ffcc00;
+  box-shadow: 0 0 0 6px rgba(255, 204, 0, .15), 0 6px 18px rgba(0,0,0,.4);
+}
+
+body.a_propos .panel {
+  background: rgba(0,0,0, .35);
+  border: 1px solid rgba(255, 255, 255, .12);
+  border-radius: 16px;
+  padding: 16px 18px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.35);
+  transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+}
+
+body.a_propos .panel:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px rgba(0,0,0,.45);
+  border-color: rgba(255, 204, 0, .35);
+}
+
+body.a_propos .date {
+  font-weight: 800;
+  color: #ffcc00;
+  letter-spacing: .3px;
+  margin-bottom: 6px;
+}
+
+body.a_propos .title {
+  margin: 4px 0 8px;
+  font-size: 1.25rem;
+  line-height: 1.2;
+}
+
+body.a_propos .desc {
+  margin: 0;
+  color: rgba(255,255,255,.85);
+  line-height: 1.65;
+}
+
+body.a_propos .btn {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  text-decoration: none;
+  color: #333;
+  background: #ffcc00;
+  font-weight: 800;
+  box-shadow: 0 10px 25px rgba(0,0,0,.35);
+}
+body.a_propos .btn:hover { filter: brightness(1.05); }
+
+body.a_propos .left  { grid-template-areas: "content ."; }
+body.a_propos .right { grid-template-areas: ". content"; }
+
+body.a_propos .left .content  { grid-area: content; justify-self: end;  max-width: 480px; }
+body.a_propos .right .content { grid-area: content; justify-self: start; max-width: 480px; }
+
+/* Révélation au scroll */
+body.a_propos .content {
+  opacity: 0;
+  transform: translateY(28px) scale(.98);
+  filter: blur(3px);
+  transition: opacity .9s cubic-bezier(.2,.65,.2,1),
+              transform .9s cubic-bezier(.2,.65,.2,1),
+              filter .9s cubic-bezier(.2,.65,.2,1);
+}
+body.a_propos .item.in-view .content {
+  opacity: 1; transform: none; filter: none;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 860px) {
+  body.a_propos main { width: 90%; padding: 28px; }
+  body.a_propos .timeline::before   { left: 18px; transform: none; }
+  body.a_propos .item               { grid-template-columns: 1fr; gap: 1rem; }
+  body.a_propos .item .marker       { left: 18px; }
+  body.a_propos .left .content,
+  body.a_propos .right .content     { justify-self: stretch; max-width: 100%; margin-left: 42px; }
+}
+
+/* ---------- Accessibilité ---------- */
+@media (prefers-reduced-motion: reduce) {
+  body.a_propos .bg-neon::after { animation: none; }
+  body.a_propos .content, body.a_propos .panel { transition: none; }
 }

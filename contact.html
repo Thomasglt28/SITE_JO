@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Contact</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="contact">
+  <!-- Calque décoratif global -->
+  <div class="bg-neon" aria-hidden="true"></div>
+
+  <header>
+    <h1>Contactez JO</h1>
+    <nav>
+      <a href="index.html">Retour Accueil</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="panel-contact">
+      <div class="formulaire-contact">
+        <h2>Contactez-moi</h2>
+        <form id="formulaire" action="https://formsubmit.co/el/vorifa" method="POST" novalidate>
+          <input type="hidden" name="_subject" value="Nouveau message de contact !" />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_template" value="table" />
+
+          <div class="champ">
+            <label for="nom">Nom et Prénom :</label>
+            <input type="text" id="nom" name="nom" />
+          </div>
+
+          <div class="champ">
+            <label for="email">Email :</label>
+            <input type="email" id="email" name="email" />
+          </div>
+
+          <div class="champ">
+            <label for="sujet">Sujet :</label>
+            <input type="text" id="sujet" name="sujet" />
+          </div>
+
+          <div class="champ">
+            <label for="message">Message :</label>
+            <textarea id="message" name="message" rows="5"></textarea>
+          </div>
+
+          <button type="submit">Envoyer</button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 - Jo photographe</p>
+  </footer>
+
+  <!-- Script de validation -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const form = document.getElementById("formulaire");
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        let isValid = true;
+
+        form.querySelectorAll(".error-message").forEach((msg) => msg.remove());
+        form.querySelectorAll("input, textarea").forEach((field) => {
+          field.classList.remove("invalid");
+        });
+
+        form.querySelectorAll("input, textarea").forEach((field) => {
+          const value = field.value.trim();
+          let error = "";
+
+          if (!value) {
+            error = "Ce champ est requis.";
+          } else if (field.type === "email" && !/^\S+@\S+\.\S+$/.test(value)) {
+            error = "Adresse email invalide.";
+          }
+
+          if (error) {
+            isValid = false;
+            field.classList.add("invalid");
+
+            const errorMsg = document.createElement("div");
+            errorMsg.className = "error-message";
+            errorMsg.textContent = error;
+            field.parentNode.appendChild(errorMsg);
+          }
+        });
+
+        if (isValid) {
+          const success = document.createElement("div");
+          success.className = "success-message";
+          success.textContent = "Message envoyé avec succès !";
+          form.appendChild(success);
+
+          setTimeout(() => success.classList.add("fade-out"), 9000);
+          setTimeout(() => success.remove(), 10000);
+
+          form.reset();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

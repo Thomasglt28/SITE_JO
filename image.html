@@ -2,24 +2,95 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Mon Site</title>
+  <title>Image</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="image">
+  <!-- Calque décoratif global : stries + néons -->
+  <div class="bg-neon" aria-hidden="true"></div>
+
   <header>
-    <h1>Bienvenue sur la partie images</h1>
+    <h1>Photographies</h1>
     <nav>
       <a href="index.html">Retour Accueil</a>
     </nav>
   </header>
 
+  <p class="description_photos">
+    <i>Les photographies sont issues de shootings photo</i>
+  </p>
+
   <main>
-    <h2>Ici sont présenté mes photographies !</h2>
-    <p>Les photographie sont issues de shootings photo</p>
+    <!-- Cadre défilant -->
+    <div class="zone-photos">
+      <div class="cadre_galerie">
+        <div class="grille_image">
+          <img src="image/photo1.jpeg" alt="Photo 1" onclick="agrandirImage(this)">
+          <img src="image/photo2.jpeg" alt="Photo 2" onclick="agrandirImage(this)">
+          <img src="image/photo3.jpeg" alt="Photo 3" onclick="agrandirImage(this)">
+          <img src="image/photo4.jpeg" alt="Photo 4" onclick="agrandirImage(this)">
+          <img src="image/photo5.jpeg" alt="Photo 5" onclick="agrandirImage(this)">
+          <img src="image/photo6.jpeg" alt="Photo 6" onclick="agrandirImage(this)">
+          <img src="image/photo7.jpeg" alt="Photo 7" onclick="agrandirImage(this)">
+          <img src="image/photo8.jpg" alt="Photo 8" onclick="agrandirImage(this)">
+          <img src="image/photo9.png" alt="Photo 9" onclick="agrandirImage(this)">
+          <img src="image/photo10.jpg" alt="Photo 10" onclick="agrandirImage(this)">
+          <img src="image/photo11.jpg" alt="Photo 11" onclick="agrandirImage(this)">
+          <img src="image/photo12.jpg" alt="Photo 12" onclick="agrandirImage(this)">
+          <!-- Ajoute autant de <img> que nécessaire -->
+        </div>
+      </div>
+    </div>
   </main>
 
+  <!-- === Lightbox HTML === -->
+  <div id="lightbox" class="lightbox" onclick="fermerLightbox(event)">
+    <span class="close-btn" onclick="fermerLightbox(event)">✖</span>
+    <img id="lightbox-img" src="" alt="Image agrandie">
+    <button class="nav-btn prev" onclick="changerImage(-1, event)">←</button>
+    <button class="nav-btn next" onclick="changerImage(1, event)">→</button>
+  </div>
+
+  <!-- === Script JS === -->
+  <script>
+    let currentIndex = 0;
+    let images = [];
+
+    function agrandirImage(img) {
+      images = Array.from(document.querySelectorAll('.grille_image img'));
+      currentIndex = images.indexOf(img);
+
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightbox-img');
+      lightboxImg.src = img.src;
+      lightbox.style.display = 'flex';
+    }
+
+    function fermerLightbox(e) {
+      if (e.target.id === 'lightbox' || e.target.classList.contains('close-btn')) {
+        document.getElementById('lightbox').style.display = 'none';
+      }
+    }
+
+    function changerImage(direction, e) {
+      e.stopPropagation();
+      currentIndex += direction;
+
+      if (currentIndex < 0) currentIndex = images.length - 1;
+      if (currentIndex >= images.length) currentIndex = 0;
+
+      const lightboxImg = document.getElementById('lightbox-img');
+      lightboxImg.style.transform = 'scale(0.95)';
+
+      setTimeout(() => {
+        lightboxImg.src = images[currentIndex].src;
+        lightboxImg.style.transform = 'scale(1)';
+      }, 150);
+    }
+  </script>
+
   <footer>
-    <p>&copy; 2025 - Jo-photographe</p>
+    <p>&copy; 2025 - Jo photographe</p>
   </footer>
 </body>
 </html>

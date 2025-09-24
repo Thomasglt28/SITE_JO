@@ -1,27 +1,130 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
   <meta charset="UTF-8">
   <title>Mon Site</title>
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    /*  Animation douce et continue de tremblement */
+    @keyframes tremblementDoux {
+      0% {transform: translate(-50%, -50%) rotate(0deg);}
+      25% {transform: translate(-50.5%, -49.5%) rotate(0.2deg);}
+      50% {transform: translate(-49.5%, -50.5%) rotate(-0.2deg);}
+      75% {transform: translate(-50.5%, -50.5%) rotate(0.2deg);}
+      100% {transform: translate(-50%, -50%) rotate(0deg);}
+    }
+
+    /*  Message d’erreur drone */
+    #erreur-drone {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: red;
+      font-style: italic;
+      text-align: center;
+      z-index: 2;
+      width: 90%;
+      animation: tremblementDoux 2s infinite;
+      pointer-events: none;
+    }
+  </style>
 </head>
+
 <body class="accueil">
+  <!-- (AJOUT) Calque décoratif global: stries + néons.
+       Ne gêne pas les clics (pointer-events:none) et reste derrière le contenu. -->
+  <div class="bg-neon" aria-hidden="true"></div>
+
   <header>
-    <h1>Bienvenue sur JO Photographe</h1>
+    <h1>JO Photographe</h1>
     <nav>
       <a href="image.html">Images</a>
-      <a href="#">À propos</a>
-      <a href="#">Contact</a>
+      <a href="a_propos.html">À propos</a>
+      <a href="contact.html">Contact</a>
     </nav>
+
+    <!--  Pour le drone 3D DJI 4 Mini pro -->
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
   </header>
 
   <main>
-    <h2>Ma première page web !</h2>
-    <p>Ce site est codé à la main et sera bientôt en ligne.</p>
+    <section class="intro-text">
+      <div class="text">
+        <h2>Capturer l'instant, raconter une histoire !</h2>
+        <p>Portraits, événements, créations artistiques — je transforme vos instants en souvenirs uniques.</p>
+      </div>
+    </section>
+
+    <div class="cadre-photo">
+      <img class="image-interne" src="image/Iphone.png" alt="Appareil Photo">
+      <h1 class="Titre-photo">Mon appareil photo : un iPhone 15 Pro Max</h1>
+      <p class="legende-photo">
+        L'iPhone 15 Pro est un véritable outil créatif pensé pour la photographie. Son appareil principal de 48
+        mégapixels, doté d'une stabilisation avancée, capture des images d'une grande netteté avec des couleurs
+        naturelles et équilibrées. Grâce à son ultra grand-angle, il permet de saisir des paysages vastes et des scènes
+        immersives, tandis que le téléobjectif 3x rapproche les sujets sans perte importante de qualité.<br><br>
+        La puissance de traitement intégrée, avec le Photonic Engine et le Smart HDR, optimise chaque cliché en révélant
+        les détails dans les zones sombres comme dans les hautes lumières. Même en conditions de faible luminosité, le
+        mode Nuit assure des photos lumineuses et détaillées. Pour les portraits, l'iPhone 15 Pro offre un rendu
+        réaliste avec un bel effet de profondeur et un flou d'arrière-plan naturel.<br><br>
+        Polyvalent et précis, il se révèle aussi bien pour des prises de vue spontanées que pour des compositions plus
+        travaillées, en combinant performance technique et simplicité d'utilisation. Avec lui, chaque instant peut être
+        transformé en photo de qualité professionnelle.
+      </p>
+    </div>
+
+    <div class="drone-cadre">
+      <model-viewer class="drone-viewer" src="modeles/dji-mini4.glb" alt="DJI Mini 4 Pro en 3D" auto-rotate
+        camera-controls shadow-intensity="1" exposure="1" style="width: 100%; height: 100%; border-radius: 12px;">
+      </model-viewer>
+
+      <h1 class="Titre-drone">Mon drone : un DJI Mini 4 Pro</h1>
+
+      <p class="legende-drone">
+        Le DJI Mini 3 Pro est un drone compact et léger pensé pour allier simplicité d'utilisation et performances
+        créatives. Avec son capteur 1/1,3 pouce et son ouverture lumineuse f/1,7, il capture des photos détaillées
+        jusqu'à 48 mégapixels et enregistre des vidéos en 4K à 60 images par seconde, offrant une qualité d'image
+        professionnelle dans un format miniature.<br><br>
+        Pesant moins de 249 grammes, il est facile à transporter et bénéficie d'une autonomie d'environ 34 minutes,
+        idéale pour multiplier les prises de vue sans contrainte. Son système de détection d'obstacles multidirectionnel
+        renforce la sécurité des vols, même dans des environnements complexes.<br><br>
+        Grâce à sa nacelle stabilisée et à la possibilité de filmer aussi bien à l'horizontale qu'à la verticale, le DJI
+        Mini 3 Pro ouvre de nouvelles perspectives pour capturer paysages, portraits aériens ou vidéos créatives
+        adaptées aux réseaux sociaux. Un outil polyvalent et accessible, pensé pour transformer chaque vol en une
+        expérience photographique unique.
+      </p>
+
+      <div id="erreur-drone" style="display: none;">
+        Attention, les réglages de votre ordinateur ne permettent pas d'afficher le contenu !
+      </div>
+    </div>
+
+    <div class="video-cadre">
+      <video width="100%" height="100%" controls>
+        <source src="videos/presentation.mov" type="video/mp4">
+        Votre navigateur ne supporte pas la vidéo HTML5.
+      </video>
+    </div>
+
   </main>
 
   <footer>
     <p>&copy; 2025 - Jo photographe</p>
   </footer>
+
+  <!--  Script de gestion de l'erreur du viewer 3D -->
+  <script>
+    const viewer = document.querySelector('model-viewer');
+    const erreurDiv = document.getElementById('erreur-drone');
+
+    viewer.addEventListener('error', () => {
+      viewer.style.display = "none";
+      erreurDiv.style.display = "block";
+    });
+  </script>
 </body>
+
 </html>

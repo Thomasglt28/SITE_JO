@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 800" width="2000" height="800">
+  <defs>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="blur1"/>
+      <feGaussianBlur stdDeviation="10" in="SourceGraphic" result="blur2"/>
+      <feMerge>
+        <feMergeNode in="blur2"/>
+        <feMergeNode in="blur1"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <linearGradient id="softWhite" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0%"  stop-color="#ffffff" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#f7f7f7" stop-opacity="0.95"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="100%" height="100%" fill="transparent"/>
+
+  <g fill="none" stroke="url(#softWhite)" stroke-width="4" filter="url(#glow)" stroke-linecap="round">
+    <path d="M -50,100 C 150,60 340,160 520,120 700,80 910,140 1080,100 1260,60 1460,130 1660,90 1800,60 1900,90 2050,70"/>
+    <path d="M -50,210 C 160,250 340,170 520,210 700,250 900,190 1080,235 1260,280 1460,210 1660,250 1840,285 1960,240 2050,255"/>
+    <path d="M -50,330 C 160,290 360,380 520,340 720,290 900,360 1080,320 1260,280 1460,350 1660,310 1840,280 1960,320 2050,300"/>
+    <path d="M -50,460 C 160,510 360,430 540,470 720,510 900,450 1080,495 1260,540 1460,470 1660,510 1840,545 1960,500 2050,515"/>
+    <path d="M -50,590 C 160,550 360,640 540,600 720,560 900,630 1080,590 1260,550 1460,620 1660,580 1840,550 1960,590 2050,570"/>
+    <path d="M -50,720 C 160,770 360,690 540,730 720,770 900,710 1080,755 1260,800 1460,730 1660,770 1840,805 1960,760 2050,775"/>
+  </g>
+</svg>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>À propos</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="a_propos">
+  <!-- Calque décoratif du fond (stries + néons) -->
+  <div class="bg-neon" aria-hidden="true"></div>
+
+  <header>
+    <h1>À propos de moi</h1>
+    <nav>
+      <a href="index.html">Retour Accueil</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="timeline" aria-label="Ligne du temps de mon parcours photo">
+      <!-- ÉTAPE 1 -->
+      <article class="item left">
+        <span class="marker" aria-hidden="true"></span>
+        <div class="content panel">
+          <div class="date">2019</div>
+          <h3 class="title">Déclic pour la photo</h3>
+          <p class="desc">Je découvre la street photo et je passe mes week-ends à shooter en lumière naturelle.</p>
+        </div>
+      </article>
+
+      <!-- ÉTAPE 2 -->
+      <article class="item right">
+        <span class="marker" aria-hidden="true"></span>
+        <div class="content panel">
+          <div class="date">2021</div>
+          <h3 class="title">Premiers shootings clients</h3>
+          <p class="desc">Portraits, événements, petites marques locales : je développe mon style et mon workflow.</p>
+        </div>
+      </article>
+
+      <!-- ÉTAPE 3 -->
+      <article class="item left">
+        <span class="marker" aria-hidden="true"></span>
+        <div class="content panel">
+          <div class="date">2023</div>
+          <h3 class="title">Studio & lumière maîtrisée</h3>
+          <p class="desc">Je monte un set mobile, j’expérimente la couleur, le noir et blanc et les ambiances ciné.</p>
+        </div>
+      </article>
+
+      <!-- ÉTAPE 4 -->
+      <article class="item right">
+        <span class="marker" aria-hidden="true"></span>
+        <div class="content panel">
+          <div class="date">2025</div>
+          <h3 class="title">Jo Photographe — nouvelles collabs</h3>
+          <p class="desc">Je crée des images authentiques et fortes. Dispo pour portraits, marques & évènements.</p>
+          <a class="btn" href="contact.html">Me contacter</a>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 - Jo photographe</p>
+  </footer>
+
+  <script>
+    // Révélation au scroll (Intersection Observer)
+    (function() {
+      var items = document.querySelectorAll('.a_propos .item');
+      if (!('IntersectionObserver' in window)) {
+        items.forEach(function(el){ el.classList.add('in-view'); });
+        return;
+      }
+      var io = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.2 });
+      items.forEach(function(el){ io.observe(el); });
+    })();
+  </script>
+</body>
+</html>
